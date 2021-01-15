@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Dapper.Extensions.Snapper</AssemblyName>
+    <Authors>Alight.EE</Authors>
+    <Description>Snapper is a small library that creates a wrapper over Dapper and provides CRUD functionality over database tables in order to help developers to create more complex SQL queries.
+The target of this library is to simplify and facilitate queries for more complex relational data models.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/alightee/Dapper-Extensions-Snapper</RepositoryUrl>
+    <PackageTags>Dapper, Dapper Extensions, Snapper</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Dapper.Contrib" Version="2.0.30" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="MySql.Data" Version="8.0.22" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

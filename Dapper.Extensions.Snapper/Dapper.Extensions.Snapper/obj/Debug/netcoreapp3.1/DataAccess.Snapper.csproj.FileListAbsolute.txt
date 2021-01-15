@@ -1,0 +1,9 @@
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\bin\Debug\netcoreapp3.1\DataAccess.Snapper.deps.json
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\bin\Debug\netcoreapp3.1\DataAccess.Snapper.dll
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\bin\Debug\netcoreapp3.1\DataAccess.Snapper.pdb
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\obj\Debug\netcoreapp3.1\DataAccess.Snapper.AssemblyInfoInputs.cache
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\obj\Debug\netcoreapp3.1\DataAccess.Snapper.AssemblyInfo.cs
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\obj\Debug\netcoreapp3.1\DataAccess.Snapper.csproj.CoreCompileInputs.cache
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\obj\Debug\netcoreapp3.1\DataAccess.Snapper.dll
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\obj\Debug\netcoreapp3.1\DataAccess.Snapper.pdb
+C:\Users\MariaFlorescu\source\repos\DataAccess.Snapper\DataAccess.Snapper\obj\Debug\netcoreapp3.1\DataAccess.Snapper.csprojAssemblyReference.cache
