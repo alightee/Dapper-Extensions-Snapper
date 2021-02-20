@@ -50,9 +50,13 @@ namespace Dapper.Extensions.Snapper.Logic
             return true;
         }
 
-        public virtual Task<bool> AddAsync(IEnumerable<TModel> models, QueryExecutionOptions options = null)
+        public virtual async Task<bool> AddAsync(IEnumerable<TModel> models, QueryExecutionOptions options = null)
         {
-            return Task.Run(() => Add(models, options));
+            foreach (var model in models)
+            {
+                await AddAsync(model, options);
+            }
+            return true;
         }
 
         public virtual bool Delete(TKey id, QueryExecutionOptions options = null)
@@ -61,7 +65,6 @@ namespace Dapper.Extensions.Snapper.Logic
             {
                 if (unitOfWork.Connection.Delete(new TModel { Id = id }, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds))
                 {
-                    Cache.Invalidate($"{CacheKey}_{id}");
                     return true;
                 }
             }
@@ -74,7 +77,6 @@ namespace Dapper.Extensions.Snapper.Logic
             {
                 if (await unitOfWork.Connection.DeleteAsync(new TModel { Id = id }, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds))
                 {
-                    Cache.Invalidate($"{CacheKey}_{id}");
                     return true;
                 }
             }
@@ -90,9 +92,13 @@ namespace Dapper.Extensions.Snapper.Logic
             return true;
         }
 
-        public virtual Task<bool> DeleteAsync(IEnumerable<TKey> ids, QueryExecutionOptions options = null)
+        public virtual async Task<bool> DeleteAsync(IEnumerable<TKey> ids, QueryExecutionOptions options = null)
         {
-            return Task.Run(() => Delete(ids, options));
+            foreach (var id in ids)
+            {
+                await DeleteAsync(id, options);
+            }
+            return true;
         }
 
         public bool DeleteWhere(Expression<Func<TModel, bool>> where, QueryExecutionOptions options = null)
@@ -103,9 +109,6 @@ namespace Dapper.Extensions.Snapper.Logic
             using (var unitOfWork = ConnectionManager.Connect())
             {
                 var rowsDeleted = unitOfWork.Connection.Execute($"DELETE FROM {TableName} WHERE {whereClauseSql}", parameters, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds);
-
-                if (rowsDeleted > 0)
-                    Cache.InvalidateByPrefix(CacheKey);
 
                 return rowsDeleted >= 0;
             }
@@ -120,9 +123,6 @@ namespace Dapper.Extensions.Snapper.Logic
             {
                 var rowsDeleted = await unitOfWork.Connection.ExecuteAsync($"DELETE FROM {TableName} WHERE {whereClauseSql}", parameters, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds);
 
-                if (rowsDeleted > 0)
-                    Cache.InvalidateByPrefix(CacheKey);
-
                 return rowsDeleted >= 0;
             }
         }
@@ -131,26 +131,16 @@ namespace Dapper.Extensions.Snapper.Logic
         {
             using (var unitOfWork = ConnectionManager.Connect())
             {
-                if (unitOfWork.Connection.Update(model, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds))
-                {
-                    Cache.Invalidate($"{CacheKey}_{model.Id}");
-                    return true;
-                }
+                return unitOfWork.Connection.Update(model, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds);
             }
-            return false;
         }
 
         public virtual async Task<bool> UpdateAsync(TModel model, QueryExecutionOptions options = null)
         {
             using (var unitOfWork = ConnectionManager.Connect())
             {
-                if (await unitOfWork.Connection.UpdateAsync(model, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds))
-                {
-                    Cache.Invalidate($"{CacheKey}_{model.Id}");
-                    return true;
-                }
+                return await unitOfWork.Connection.UpdateAsync(model, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds);
             }
-            return false;
         }
 
         public virtual bool Update(IEnumerable<TModel> models, QueryExecutionOptions options = null)
@@ -164,9 +154,15 @@ namespace Dapper.Extensions.Snapper.Logic
             return result;
         }
 
-        public virtual Task<bool> UpdateAsync(IEnumerable<TModel> models, QueryExecutionOptions options = null)
+        public virtual async Task<bool> UpdateAsync(IEnumerable<TModel> models, QueryExecutionOptions options = null)
         {
-            return Task.Run(() => Update(models, options));
+            bool result = true;
+            foreach (var model in models)
+            {
+                if (result)
+                    result = result && await UpdateAsync(model, options);
+            }
+            return result;
         }
     }
 }

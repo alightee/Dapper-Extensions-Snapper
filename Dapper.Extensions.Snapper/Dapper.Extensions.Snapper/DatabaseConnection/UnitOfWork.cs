@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
+﻿using System.Data.Common;
 
 namespace Dapper.Extensions.Snapper.DatabaseConnection
 {
@@ -75,7 +73,10 @@ namespace Dapper.Extensions.Snapper.DatabaseConnection
             if (IsDisposed)
                 return;
 
-            CommitTransaction();
+            if (TransactionFinished)
+                return;
+
+            RollbackTransaction();
             CloseConnection();
         }
     }

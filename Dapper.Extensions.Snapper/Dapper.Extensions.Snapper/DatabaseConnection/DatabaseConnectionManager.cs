@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Common;
-using System.Text;
-using Microsoft.AspNetCore.Http;
 
 namespace Dapper.Extensions.Snapper.DatabaseConnection
 {
     public abstract class DatabaseConnectionManager<TDbConnection> : IDatabaseConnectionFactory<TDbConnection>, ITransactionManager<TDbConnection> where TDbConnection : DbConnection
     {
         private UnitOfWork<TDbConnection> UnitOfWork { get; set; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         public string ConnectionString { get; private set; }
         public int TransactionCount { get; private set; } = 0;
 
-        public DatabaseConnectionManager(IHttpContextAccessor httpContextAccessor, string connectionString)
+        public DatabaseConnectionManager(string connectionString)
         {
-            HttpContextAccessor = httpContextAccessor;
             ConnectionString = connectionString;
         }
 
@@ -36,16 +30,6 @@ namespace Dapper.Extensions.Snapper.DatabaseConnection
             if (UnitOfWork == null || UnitOfWork.IsDisposed)
             {
                 UnitOfWork = CreateUnitOfWork();
-
-                // in global exception handling, we will check if this item exists in the context and then
-                //  using Instractucture.Interfaces.ITransactionRollBack we will roll it back
-
-                //TODO: change with params - Midlleware handling exception
-                //var httpContextItems = HttpContextAccessor.HttpContext.Items;
-                //if (httpContextItems.ContainsKey(ApplicationConstants.HttpContextItemKey_CurrentTransaction))
-                //    httpContextItems.Remove(ApplicationConstants.HttpContextItemKey_CurrentTransaction);
-
-                //httpContextItems.Add(ApplicationConstants.HttpContextItemKey_CurrentTransaction, UnitOfWork);
             }
 
             UnitOfWork.StartTransaction();

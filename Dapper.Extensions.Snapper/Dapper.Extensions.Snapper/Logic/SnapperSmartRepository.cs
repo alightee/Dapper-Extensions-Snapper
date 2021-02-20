@@ -106,9 +106,6 @@ namespace Dapper.Extensions.Snapper.Logic
             {
                 var deletedRows = unitOfWork.Connection.Execute($"DELETE FROM {TableName} WHERE {whereClauseSql}", parameters, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds);
 
-                if (deletedRows > 0)
-                    Cache.InvalidateByPrefix(CacheKey);
-
                 return deletedRows >= 0;
             }
         }
@@ -121,9 +118,6 @@ namespace Dapper.Extensions.Snapper.Logic
             using (var unitOfWork = ConnectionManager.Connect())
             {
                 var deletedRows = await unitOfWork.Connection.ExecuteAsync($"DELETE FROM {TableName} WHERE {whereClauseSql}", parameters, ConnectionManager.GetCurrentTransaction(), options?.TimeoutInSeconds);
-
-                if (deletedRows > 0)
-                    Cache.InvalidateByPrefix(CacheKey);
 
                 return deletedRows >= 0;
             }
