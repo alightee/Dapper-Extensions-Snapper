@@ -971,6 +971,22 @@ namespace Dapper.Extensions.Snapper.Tests.SqlCompiler
             Assert.AreEqual(1, clause.Parameters["__P0"]);
         }
 
+        [TestMethod]
+        public void Model_PropertyComparison_SameModelButInstanced()
+        {
+            //ARRANGE
+            var instanced = new Model { Id_Int = 1, StringData = "bla"  };
+
+            //ACT
+            var clause = WhereClauseCompiler.ToSql<Model>(x => x.StringData == instanced.StringData);
+
+            //ASSERT
+            Assert.AreEqual("([StringData] = @__P0)", clause.Sql);
+            Assert.AreEqual(1, clause.Parameters.Count);
+            Assert.AreEqual(typeof(string), clause.Parameters["__P0"].GetType());
+            Assert.AreEqual("bla", clause.Parameters["__P0"]);
+        }
+
         #endregion
     }
 }

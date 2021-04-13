@@ -280,28 +280,11 @@ namespace Dapper.Extensions.Snapper.Helpers.SqlCompiler
 			/// <returns></returns>
 			private bool IsPropertyOfModel(MemberExpression expression)
 			{
-				if (expression.Member is PropertyInfo)
+				if (expression.Member is PropertyInfo && expression.Expression is ParameterExpression)
 				{
 					var property = (PropertyInfo)expression.Member;
-
-					if (property.DeclaringType != null)
-					{
-						if (typeof(T) == property.DeclaringType)
-						{
-							CheckModelProperty(property);
-							return true;
-						}
-
-						if (property.DeclaringType.IsAssignableFrom(typeof(T)))
-						{
-							// we can be sure that it's a property of the model because that's the only parameter we accept
-							if (expression.Expression is ParameterExpression)
-							{
-								CheckModelProperty(property);
-								return true;
-							}
-						}
-					}
+					CheckModelProperty(property);
+					return true;
 				}
 				return false;
 			}
